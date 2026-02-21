@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Match Results | Lost & Found</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .lost-card, .match-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .lost-card img {
+            width: 220px;
+            border-radius: 10px;
+            border: 2px solid #3498db;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .match-card img {
+            width: 100%;
+            border-radius: 10px;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn-contact:hover {
+            background: #1e8449;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>🎉 Lost Item Submitted Successfully</h2>
+
+    <!-- LOST ITEM CARD -->
+    
+
+
+    <h2>🟢 Possible Matches Found</h2>
+
+    {% if matches %}
+    <div class="match-grid">
+        {% for item in matches %}
+        <div class="match-card">
+
+            {% if item.photo %}
+                <img src="{{ item.photo.url }}">
+            {% else %}
+                <p>No image</p>
+            {% endif %}
+
+            <span class="tag">MATCH FOUND</span>
+
+            <h4>{{ item.name }}</h4>
+            <p><b>Category:</b> {{ item.item_type }}</p>
+            <p><b>Location:</b> {{ item.location }}</p>
+            <p>{{ item.description }}</p>
+
+            <!-- Contact Finder Button -->
+            <a href="mailto:{{ item.finder_email }}" class="btn-contact">
+                Contact Finder
+            </a>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p style="text-align:center;font-size:18px;">❌ No matching found items yet.</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

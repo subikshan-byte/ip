@@ -1,0 +1,635 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Found Item | AI Lost & Found</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}   ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+    /* Additional styles for found.html */
+
+    /* Alerts */
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .alert i {
+        font-size: 1.2rem;
+        margin-top: 0.2rem;
+    }
+
+    .alert-info {
+        background-color: #e7f3ff;
+        border-left: 4px solid #2196f3;
+        color: #0d47a1;
+    }
+
+    .alert-warning {
+        background-color: #fff8e1;
+        border-left: 4px solid #ffc107;
+        color: #5d4037;
+    }
+
+    /* Photo help text */
+    .photo-help {
+        display: block;
+        margin-top: 0.5rem;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    /* Location input with button */
+    .location-input {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-location {
+        padding: 0.8rem 1rem;
+        background: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        cursor: pointer;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-location:hover {
+        background: #e0e0e0;
+    }
+
+    /* Condition and Preference Options */
+    .condition-options,
+    .contact-preferences {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .condition-option,
+    .preference-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        transition: all 0.3s;
+    }
+
+    .condition-option:hover,
+    .preference-option:hover {
+        background: #f5f5f5;
+    }
+
+    .condition-option input[type="radio"],
+    .preference-option input[type="checkbox"] {
+        margin: 0;
+    }
+
+    /* Storage Options */
+    .storage-options select {
+        background-color: white;
+    }
+
+    /* Next Steps Timeline */
+    .next-steps {
+        margin-top: 3rem;
+        padding: 2rem;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 10px;
+    }
+
+    .steps-timeline {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 2rem;
+    }
+
+    .steps-timeline::before {
+        content: '';
+        position: absolute;
+        top: 20px;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: #4a6baf;
+        z-index: 1;
+    }
+
+    .step {
+        flex: 1;
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: #4a6baf;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .step-content {
+        padding: 0 1rem;
+    }
+
+    .step-content h4 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    /* Notifications */
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .notification.success {
+        background: #4caf50;
+        color: white;
+    }
+
+    .notification.error {
+        background: #f44336;
+        color: white;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    /* Section Note */
+    .section-note {
+        color: #666;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .steps-timeline {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .steps-timeline::before {
+            display: none;
+        }
+
+        .location-input {
+            flex-direction: column;
+        }
+
+        .condition-options,
+        .contact-preferences {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+</style>
+
+<body>
+    <!-- Header (same as index.html) -->
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-search-location logo-icon"></i>
+            <h1>AI Lost & Found</h1>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="lost.html">Lost Item</a>
+            <a href="about.html">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="form-header">
+            <h2><i class="fas fa-check-circle"></i> Report Found Item</h2>
+            <p>Found something? Help return it to its owner! Upload a photo and details.</p>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                <p>Our AI will automatically search for matching lost items and notify the owner.</p>
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+             {% csrf_token %}
+            <!-- Photo Upload (REQUIRED for found items) -->
+            <div class="form-section">
+                <h3>1. Upload Photo of Found Item *</h3>
+                <div class="photo-upload">
+                    
+                    <label for="foundItemPhoto" class="upload-area" id="foundUploadArea">
+                    <i class="fas fa-camera"></i>
+                    <p>Click to upload photo</p>
+                  </label>
+
+<input type="file" name="photo" id="foundItemPhoto" accept="image/*" hidden>
+                    <div class="preview-container" id="foundPreviewContainer" style="display: none;">
+                        <img id="foundImagePreview" src="" alt="Preview">
+                        <button type="button" id="foundRemoveImage" class="btn-remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <small class="photo-help">Take a clear, well-lit photo showing colors and any unique features.</small>
+            </div>
+
+            <!-- Item Details -->
+            <div class="form-section">
+                <h3>2. Item Details</h3>
+
+                <!-- Item Type Dropdown -->
+                <div class="form-group">
+                    <label for="foundItemType"><i class="fas fa-tag"></i> What did you find? *</label>
+                    <select id="foundItemType" name="item_type" required>
+                        <option value="">Select item type</option>
+                        <option value="mobile">Mobile Phone</option>
+                        <option value="headset">Headset/Earphones</option>
+                        <option value="waterbottle">Water Bottle</option>
+                        <option value="idcard">ID Card</option>
+                        <option value="books">Books</option>
+                        <option value="laptop">Laptop</option>
+                        <option value="charger">Charger</option>
+                        <option value="wallet">Wallet/Purse</option>
+                        <option value="keys">Keys</option>
+                        <option value="bag">Bag/Backpack</option>
+                        <option value="jewelry">Jewelry</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Brand Dropdown (Dynamic) -->
+                <div class="form-group" id="foundBrandGroup">
+                    <label for="foundBrand"><i class="fas fa-trademark"></i> Brand (if visible)</label>
+                    <select id="foundBrand" name="brand">
+                        <option value="">Select brand (if known)</option>
+                        <!-- Brands will be populated based on item type -->
+                    </select>
+                </div>
+
+                <!-- Color Selection -->
+            
+
+                <!-- Condition of Item -->
+                <div class="form-group">
+                    <label for="condition"><i class="fas fa-clipboard-check"></i> Condition</label>
+                    <div class="condition-options">
+                        <label class="condition-option">
+                            <input type="radio"  name="condition" value="new">
+                            <span>Like New</span>
+                        </label>
+                        <label class="condition-option">
+                            <input type="radio" name="condition" value="good">
+                            <span>Good</span>
+                        </label>
+                        <label class="condition-option">
+                            <input type="radio" name="condition" value="worn">
+                            <span>Worn/Used</span>
+                        </label>
+                        <label class="condition-option">
+                            <input type="radio" name="condition" value="damaged">
+                            <span>Damaged</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="foundDescription"><i class="fas fa-align-left"></i> Description *</label>
+                    <textarea id="foundDescription" name="description" placeholder="Describe the item in detail. Include any unique features, stickers, scratches, contents (if applicable), or identifying marks..."
+                        placeholder="Describe the item in detail. Include any unique features, stickers, scratches, contents (if applicable), or identifying marks..."
+                        required></textarea>
+                    <small>Be detailed to help the owner identify it. Mention if there are personal items
+                        inside.</small>
+                </div>
+
+                <!-- Found Location & Time -->
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="foundLocation"><i class="fas fa-map-marker-alt"></i> Where did you find it?
+                            *</label>
+                        <div class="location-input">
+                            <input type="text" name="found_location" id="foundLocation" 
+                                placeholder="e.g., Library main desk, Parking lot section B" required>
+                            <button type="button" class="btn-location" id="useCurrentLocation">
+                                <i class="fas fa-crosshairs"></i> Use Current Location
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="foundDate"><i class="fas fa-calendar-alt"></i> When did you find it? *</label>
+                        <input type="datetime-local" name="found_date" id="foundDate" required>
+                    </div>
+                </div>
+
+                <!-- Item Storage Location -->
+                <div class="form-group">
+                    <label for="storageLocation"><i class="fas fa-box"></i> Where is the item now? *</label>
+                    <div class="storage-options">
+                        <select id="storageLocation" name="storage_location" required>
+                            <option value="">Select current location</option>
+                            <option value="with-me">With me (I have it)</option>
+                            <option value="security-desk">Security Desk</option>
+                            <option value="lost-found-office">Lost & Found Office</option>
+                            <option value="reception">Reception/Information Desk</option>
+                            <option value="police-station">Police Station</option>
+                            <option value="other-location">Other Location</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="specificLocationGroup" style="display: none; margin-top: 10px;">
+                        <input type="text" id="specificLocation" placeholder="Please specify the exact location">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Contact Information -->
+            <div class="form-section">
+                <h3>3. Your Contact Information</h3>
+                <p class="section-note">This information will only be shared with the verified owner.</p>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="finderName">Your Name *</label>
+                        <input type="text" name="finder_name" id="finderName" required>
+                    </div>
+                    <div class="form-group half">
+                        <label for="finderEmail">Email *</label>
+                        <input type="email" name="finder_email" id="finderEmail" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="finderPhone">Phone Number (optional)</label>
+                    <input type="tel" name="finder_phone" id="finderPhone">
+                    <small>Makes it easier for the owner to arrange pickup</small>
+                </div>
+
+              
+
+                <!-- Privacy Notice -->
+                <div class="alert alert-warning">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Privacy Notice:</strong> Your contact information will only be shared with the verified
+                        owner of this item.
+                        We use verification questions to confirm ownership before sharing details.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Submit Found Report
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+
+        <!-- What Happens Next Section -->
+        <div class="next-steps">
+            <h3><i class="fas fa-forward"></i> What Happens Next?</h3>
+            <div class="steps-timeline">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>AI Matching</h4>
+                        <p>Our AI will scan the photo and match it against lost item reports</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Owner Notification</h4>
+                        <p>If a match is found, the owner will be notified immediately</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Verification</h4>
+                        <p>We'll help both parties verify ownership securely</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Reunion!</h4>
+                        <p>You'll coordinate with the owner for return</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 AI Lost & Found Project. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'script.js' %}"></script>
+    <script>
+        // Additional JavaScript for found.html
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize dynamic brand dropdown (same as lost.html but for found item)
+            const foundItemTypeSelect = document.getElementById('foundItemType');
+            const foundBrandSelect = document.getElementById('foundBrand');
+
+            if (foundItemTypeSelect && foundBrandSelect) {
+                foundItemTypeSelect.addEventListener('change', function () {
+                    const selectedType = this.value;
+
+                    // Clear previous options
+                    foundBrandSelect.innerHTML = '<option value="">Select brand (if known)</option>';
+
+                    if (selectedType && brandsByCategory[selectedType]) {
+                        // Add new options
+                        brandsByCategory[selectedType].forEach(brand => {
+                            const option = document.createElement('option');
+                            option.value = brand.toLowerCase().replace(/\s+/g, '-');
+                            option.textContent = brand;
+                            foundBrandSelect.appendChild(option);
+                        });
+
+                        document.getElementById('foundBrandGroup').style.display = 'block';
+                    } else {
+                        document.getElementById('foundBrandGroup').style.display = 'none';
+                    }
+                });
+            }
+
+            // Storage location specific field
+            const storageLocation = document.getElementById('storageLocation');
+            const specificLocationGroup = document.getElementById('specificLocationGroup');
+
+            if (storageLocation) {
+                storageLocation.addEventListener('change', function () {
+                    if (this.value === 'other-location') {
+                        specificLocationGroup.style.display = 'block';
+                        document.getElementById('specificLocation').required = true;
+                    } else {
+                        specificLocationGroup.style.display = 'none';
+                        document.getElementById('specificLocation').required = false;
+                    }
+                });
+            }
+
+            // Current location button
+            const useCurrentLocationBtn = document.getElementById('useCurrentLocation');
+            const foundLocationInput = document.getElementById('foundLocation');
+
+            if (useCurrentLocationBtn) {
+                useCurrentLocationBtn.addEventListener('click', function () {
+                    if (navigator.geolocation) {
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
+                        this.disabled = true;
+
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            // In real implementation, you would reverse geocode to get address
+                            const lat = position.coords.latitude;
+                            const lng = position.coords.longitude;
+
+                            // For demo, show coordinates
+                            foundLocationInput.value = `Near coordinates: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+                            useCurrentLocationBtn.innerHTML = '<i class="fas fa-crosshairs"></i> Use Current Location';
+                            useCurrentLocationBtn.disabled = false;
+
+                            // Show success message
+                            showNotification('Location detected successfully!', 'success');
+                        }, function (error) {
+                            useCurrentLocationBtn.innerHTML = '<i class="fas fa-crosshairs"></i> Use Current Location';
+                            useCurrentLocationBtn.disabled = false;
+
+                            let message = "Unable to get location. Please enter manually.";
+                            if (error.code === error.PERMISSION_DENIED) {
+                                message = "Location permission denied. Please enable location services or enter manually.";
+                            }
+                            showNotification(message, 'error');
+                        });
+                    } else {
+                        showNotification("Geolocation is not supported by your browser", 'error');
+                    }
+                });
+            }
+
+            // Form submission for found item
+            const foundItemForm = document.getElementById('foundItemForm');
+            if (foundItemForm) {
+                foundItemForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    // Check if photo is uploaded
+                    const fileInput = document.getElementById('foundItemPhoto');
+                    if (!fileInput.files[0]) {
+                        showNotification('Please upload a photo of the found item', 'error');
+                        return;
+                    }
+
+                    if (this.checkValidity()) {
+                        // Success message
+                        showNotification('Thank you! Found item report submitted successfully. Our AI is now searching for the owner.', 'success');
+
+                        // Log data for demo
+                        console.log('Found Item Data:', {
+                            itemType: document.getElementById('foundItemType').value,
+                            brand: document.getElementById('foundBrand').value,
+                            color: document.getElementById('foundSelectedColor').value,
+                            description: document.getElementById('foundDescription').value,
+                            location: document.getElementById('foundLocation').value,
+                            date: document.getElementById('foundDate').value,
+                            storage: document.getElementById('storageLocation').value
+                        });
+
+                        // Reset form
+                        this.reset();
+                        document.getElementById('foundPreviewContainer').style.display = 'none';
+                        document.getElementById('foundUploadArea').style.display = 'flex';
+                        specificLocationGroup.style.display = 'none';
+
+                        // Clear color selection
+                        const colorOptions = document.querySelectorAll('#foundItemForm .color-option');
+                        colorOptions.forEach(opt => opt.classList.remove('active'));
+
+                        // Show success modal
+                        setTimeout(() => {
+                            alert('✅ Found item successfully reported!\n\nOur AI is now searching for matching lost items. You will be contacted if we find a potential owner.\n\nThank you for your honesty!');
+                        }, 500);
+                    }
+                });
+            }
+
+            // Helper function for notifications
+            function showNotification(message, type) {
+                // Create notification element
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <span>${message}</span>
+                `;
+
+                // Add to page
+                document.body.appendChild(notification);
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found AI | Reclaim Your Items</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-search-location logo-icon"></i>
+            <h1>AI Lost & Found</h1>
+        </div>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero-section">
+        <div class="hero-content">
+            <h2>Lost Something? Found Something?</h2>
+            <p>Our AI-powered system helps reunite lost items with their owners</p>
+            
+            <div class="action-buttons">
+                <a href="{% url "lost" %}" class="btn btn-lost">
+                    <i class="fas fa-exclamation-circle"></i>
+                    I Lost an Item
+                </a>
+                <a href="{% url "found" %}" class="btn btn-found">
+                    <i class="fas fa-check-circle"></i>
+                    I Found an Item
+                </a>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">1000+</span>
+                    <span class="stat-label">Items Reported</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">85%</span>
+                    <span class="stat-label">Success Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">AI Matching</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/2975/2975055.png" alt="Lost and Found Illustration">
+        </div>
+    </main>
+    <!-- ================= LOST ITEMS LIST ================= -->
+<section class="lost-items-section">
+    <h2 style="text-align:center;margin-top:40px;">🔴 Recently Reported Lost Items</h2>
+
+    <div class="lost-items-grid">
+        {% for item in lost_items %}
+        <div class="lost-card">
+
+            {% if item.photo %}
+                <img src="{{ item.photo.url }}" class="lost-img">
+            {% else %}
+                <div class="no-img">No Image</div>
+            {% endif %}
+
+            <h3>{{ item.get_item_type_display }}</h3>
+           
+            <p><b>Brand:</b> {{ item.brand }}</p>
+            <p><b>Lost At:</b> {{ item.lost_location }}</p>
+            <p><b>Date:</b> {{ item.lost_date }}</p>
+            <p><b>Description:</b> {{ item.description|truncatewords:15 }}</p>
+            <a href="mailto:{{ item.finder_email }}" class="btn-contact">
+                Contact Finder
+            </a>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">No lost items reported yet.</p>
+        {% endfor %}
+    </div>
+</section>
+<br style="margin-bottom: 40px;">
+<section class="lost-items-section">
+    <h2 style="text-align:center;margin-top:40px;">🟢 Recently Reported Found Items</h2>
+
+    <div class="lost-items-grid">
+        {% for item in found_items %}
+        <div class="lost-card">
+
+            {% if item.photo %}
+                <img src="{{ item.photo.url }}" class="lost-img">
+            {% else %}
+                <div class="no-img">No Image</div>
+            {% endif %}
+
+            <h3>{{ item.get_item_type_display }}</h3>
+            <p><b>Color:</b> {{ item.color }}</p>
+            <p><b>Brand:</b> {{ item.brand }}</p>
+            <p><b>Lost At:</b> {{ item.lost_location }}</p>
+            <p><b>Date:</b> {{ item.lost_date }}</p>
+            <p>{{ item.description|truncatewords:15 }}</p>
+            <a href="mailto:{{ item.finder_email }}" class="btn-contact">
+                Contact Finder
+            </a>
+
+        </div>
+        {% empty %}
+        <p style="text-align:center;">No Found items reported yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+    <!-- About Us Preview Section -->
+    <section class="about-preview" id="about">
+        <h2>About Our Team</h2>
+        <p>We're a dedicated team working to solve the lost-and-found problem using AI technology</p>
+        
+        <div class="team-container">
+            <div class="team-member">
+                <div class="member-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>Team Member 1</h3>
+                <p class="role">Frontend Developer</p>
+                <p>Responsible for UI/UX design</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>Team Member 2</h3>
+                <p class="role">Backend Developer</p>
+                <p>Handles server logic</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>Team Member 3</h3>
+                <p class="role">AI/ML Engineer</p>
+                <p>Develops matching algorithms</p>
+            </div>
+            
+            <div class="team-member">
+                <div class="member-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3>Team Member 4</h3>
+                <p class="role">Project Manager</p>
+                <p>Coordinates the project</p>
+            </div>
+        </div>
+        
+        <a href="about.html" class="btn btn-secondary">Learn More About Us</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 AI Lost & Found Project. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>
