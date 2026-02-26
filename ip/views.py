@@ -54,11 +54,13 @@ from .models import FoundItem
 
 def found(request):
     if request.method == "POST":
+        brand = request.POST.get("brand") or "Unknown"
+        
         FoundItem.objects.create(
             item_type=request.POST.get("item_type"),
-            brand=request.POST.get("brand"),
+            brand=brand,
       
-            condition=request.POST.get("condition"),
+            condition = request.POST.get("condition") or "unknown",
             description=request.POST.get("description"),
             found_location=request.POST.get("found_location"),
             found_date=request.POST.get("found_date"),
