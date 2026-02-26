@@ -566,4 +566,37 @@ footer {
     <script src="{% static 'script.js' %}"></script>
 </body>
 
+<script>
+const fileInput = document.getElementById("foundItemPhoto");
+const uploadArea = document.getElementById("foundUploadArea");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const removeBtn = document.getElementById("removeImage");
+
+/* Show preview after selecting image */
+fileInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            previewContainer.style.display = "block";
+            uploadArea.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+/* Remove image */
+removeBtn.addEventListener("click", function () {
+    fileInput.value = "";
+    imagePreview.src = "";
+    previewContainer.style.display = "none";
+    uploadArea.style.display = "block";
+});
+</script>
 </html>
