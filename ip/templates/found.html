@@ -896,6 +896,57 @@ footer {
 
     <script src="{% static 'script.js' %}"></script>
     <script>
+        /* ===============================
+   BRANDS BY ITEM CATEGORY
+================================ */
+
+const brandsByCategory = {
+    mobile: [
+        "Apple", "Samsung", "OnePlus", "Xiaomi", "Realme",
+        "Oppo", "Vivo", "Google Pixel", "Nokia", "Motorola"
+    ],
+
+    laptop: [
+        "Apple", "Dell", "HP", "Lenovo", "Asus",
+        "Acer", "MSI", "Samsung", "Microsoft Surface"
+    ],
+
+    headset: [
+        "Sony", "Boat", "JBL", "Realme", "OnePlus",
+        "Apple AirPods", "Noise", "Skullcandy", "Bose"
+    ],
+
+    charger: [
+        "Apple", "Samsung", "OnePlus", "Mi", "Realme",
+        "Boat", "Anker", "Portronics"
+    ],
+
+    waterbottle: [
+        "Milton", "Cello", "Tupperware", "Pigeon", "Signoraware"
+    ],
+
+    bag: [
+        "Wildcraft", "Skybags", "American Tourister",
+        "Nike", "Adidas", "Puma"
+    ],
+
+    jewelry: [
+        "Tanishq", "Malabar Gold", "Kalyan Jewellers", "Local/Unknown"
+    ],
+
+    clothing: [
+        "Nike", "Adidas", "Puma", "Zara", "H&M", "Levi's"
+    ],
+
+    wallet: [
+        "WildHorn", "Tommy Hilfiger", "Fastrack", "Woodland"
+    ],
+
+    idcard: ["College ID", "Office ID", "Government ID"],
+    books: ["NCERT", "Pearson", "McGraw Hill", "Oxford"],
+    keys: ["Unknown"],
+    other: ["Unknown"]
+};
         // Additional JavaScript for found.html
         document.addEventListener('DOMContentLoaded', function () {
             // Initialize dynamic brand dropdown (same as lost.html but for found item)
@@ -1089,3 +1140,4 @@ if (foundRemoveBtn) {
 
 
 </html>
+
