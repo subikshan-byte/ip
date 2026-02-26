@@ -599,4 +599,94 @@ removeBtn.addEventListener("click", function () {
     uploadArea.style.display = "block";
 });
 </script>
+ <script>
+/* =====================================
+   BRANDS DATA BY ITEM TYPE
+===================================== */
+
+const brandsByCategory = {
+    mobile: [
+        "Apple", "Samsung", "OnePlus", "Xiaomi",
+        "Realme", "Oppo", "Vivo", "Google Pixel", "Nokia"
+    ],
+
+    laptop: [
+        "Apple", "Dell", "HP", "Lenovo",
+        "Asus", "Acer", "MSI", "Samsung"
+    ],
+
+    headset: [
+        "Sony", "Boat", "JBL", "Realme",
+        "OnePlus", "Apple AirPods", "Noise", "Bose"
+    ],
+
+    charger: [
+        "Apple", "Samsung", "OnePlus",
+        "Mi", "Realme", "Anker", "Boat"
+    ],
+
+    waterbottle: [
+        "Milton", "Cello", "Tupperware", "Pigeon"
+    ],
+
+    bag: [
+        "Wildcraft", "Skybags", "American Tourister",
+        "Nike", "Adidas", "Puma"
+    ],
+
+    wallet: [
+        "WildHorn", "Tommy Hilfiger", "Fastrack", "Woodland"
+    ],
+
+    jewelry: [
+        "Tanishq", "Malabar Gold", "Kalyan Jewellers"
+    ],
+
+    clothing: [
+        "Nike", "Adidas", "Puma", "Zara", "H&M", "Levi's"
+    ],
+
+    books: ["NCERT", "Pearson", "Oxford"],
+    idcard: ["College ID", "Office ID", "Government ID"],
+    keys: ["Unknown"],
+    other: ["Unknown"]
+};
+
+
+/* =====================================
+   DYNAMIC BRAND DROPDOWN
+===================================== */
+
+const itemTypeSelect = document.getElementById("itemType");
+const brandSelect = document.getElementById("brand");
+const brandGroup = document.getElementById("brandGroup");
+
+/* hide brand initially */
+brandGroup.style.display = "none";
+
+itemTypeSelect.addEventListener("change", function () {
+
+    const selectedType = this.value;
+
+    // reset options
+    brandSelect.innerHTML =
+        '<option value="">Select brand (optional)</option>';
+
+    if (brandsByCategory[selectedType]) {
+
+        brandsByCategory[selectedType].forEach(brand => {
+            const option = document.createElement("option");
+            option.value = brand;
+            option.textContent = brand;
+            brandSelect.appendChild(option);
+        });
+
+        brandGroup.style.display = "block";
+
+    } else {
+        brandGroup.style.display = "none";
+    }
+});
+</script>
 </html>
+
