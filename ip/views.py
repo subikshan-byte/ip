@@ -12,7 +12,7 @@ def lost(request):
     if request.method == "POST":
         # Get Lost Form Data
         item_type = request.POST.get("itemType")
-        brand = request.POST.get("brand")
+        brand = request.POST.get("brand") or "Unknown"
        
         description = request.POST.get("description")
         lost_location = request.POST.get("lostLocation")
