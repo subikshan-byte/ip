@@ -38,14 +38,44 @@ def lost(request):
         )
 
         # 🔥 AUTO MATCH FOUND ITEMS
-        matches = FoundItem.objects.filter(
-            item_type=item_type,
-        )
+        matches = []
+
+        found_items = FoundItem.objects.all()
+
+        for item in found_items:
+            score = 0
+
+            # 1️⃣ item type match
+            if item.item_type == item_type:
+                score += 1
+
+            # 2️⃣ brand match
+            if item.brand and item.brand.lower() == brand.lower():
+                score += 1
+
+            # 3️⃣ description keyword match
+            lost_words = set(description.split())
+            found_words = set(item.description.lower().split())
+
+            common_words = lost_words.intersection(found_words)
+
+            if len(common_words) >= 2:  # adjustable sensitivity
+                score += 1
+
+            # only keep meaningful matches
+            if score > 0:
+                matches.append({
+                    "item": item,
+                    "score": score
+                })
+
+        # sort best matches first
+        matches = sorted(matches, key=lambda x: x["score"], reverse=True)
 
         # Send results to template
         return render(request, "match_results.html", {
             "lost_item": lost_item,
-            "matches": matches
+            "matches": matches,"l":"1"
         })
 
     return render(request, "lost.html")
@@ -70,8 +100,44 @@ def found(request):
             finder_phone=request.POST.get("finder_phone"),
             photo=request.FILES.get("photo"),
         )
+        matches = []
 
-        return redirect("index")
+        found_items = LostItem.objects.all()
+
+        for item in found_items:
+            score = 0
+
+            # 1️⃣ item type match
+            if item.item_type == item_type:
+                score += 1
+
+            # 2️⃣ brand match
+            if item.brand and item.brand.lower() == brand.lower():
+                score += 1
+
+            # 3️⃣ description keyword match
+            lost_words = set(description.split())
+            found_words = set(item.description.lower().split())
+
+            common_words = lost_words.intersection(found_words)
+
+            if len(common_words) >= 2:  # adjustable sensitivity
+                score += 1
+
+            # only keep meaningful matches
+            if score > 0:
+                matches.append({
+                    "item": item,
+                    "score": score
+                })
+
+        # sort best matches first
+        matches = sorted(matches, key=lambda x: x["score"], reverse=True)
+
+        return render(request, "match_results.html", {
+            "lost_item": lost_item,
+            "matches": matches,"l":"0"
+        })
    
 
     return render(request, "found.html")
