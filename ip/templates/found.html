@@ -1047,5 +1047,45 @@ footer {
         });
     </script>
 </body>
+    /* ===============================
+   FOUND ITEM IMAGE PREVIEW
+================================ */
+
+const foundFileInput = document.getElementById("foundItemPhoto");
+const foundUploadArea = document.getElementById("foundUploadArea");
+const foundPreviewContainer = document.getElementById("foundPreviewContainer");
+const foundImagePreview = document.getElementById("foundImagePreview");
+const foundRemoveBtn = document.getElementById("foundRemoveImage");
+
+/* Show preview when image selected */
+if (foundFileInput) {
+    foundFileInput.addEventListener("change", function () {
+
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                foundImagePreview.src = e.target.result;
+                foundPreviewContainer.style.display = "block";
+                foundUploadArea.style.display = "none";
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+/* Remove uploaded image */
+if (foundRemoveBtn) {
+    foundRemoveBtn.addEventListener("click", function () {
+        foundFileInput.value = "";
+        foundImagePreview.src = "";
+        foundPreviewContainer.style.display = "none";
+        foundUploadArea.style.display = "flex";
+    });
+}
+
 
 </html>
