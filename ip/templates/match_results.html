@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Results | AI Lost & Found</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo-container { display: flex; align-items: center; gap: 1rem; }
+        .logo-icon { font-size: 2rem; color: #4a6baf; }
+        h1 { color: #2c3e50; }
+        nav a { margin-left: 2rem; text-decoration: none; color: #555; font-weight: 500; }
+        nav a:hover { color: #4a6baf; }
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; }
+        .success-banner { background: linear-gradient(135deg, #1dd1a1, #10ac84); color: white; padding: 2rem; border-radius: 12px; text-align: center; margin-bottom: 2rem; }
+        .success-banner h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .submitted-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 2rem; display: flex; gap: 1.5rem; align-items: flex-start; border-left: 5px solid #4a6baf; flex-wrap: wrap; }
+        .submitted-card img { width: 160px; height: 160px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+        .submitted-card .no-img { width: 160px; height: 160px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #aaa; flex-shrink: 0; }
+        .submitted-info h3 { color: #2c3e50; font-size: 1.3rem; margin-bottom: 0.75rem; }
+        .submitted-info p { color: #555; margin-bottom: 0.4rem; font-size: 0.95rem; }
+        .section-title { font-size: 1.5rem; color: #2c3e50; margin: 2rem 0 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .match-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.5rem; }
+        .match-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; border-top: 4px solid #3498db; }
+        .match-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+        .match-card img { width: 100%; height: 180px; object-fit: cover; }
+        .match-card .no-img { height: 180px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: #aaa; }
+        .match-body { padding: 1rem; }
+        .score-badge { display: inline-block; background: #3498db; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 0.6rem; }
+        .score-badge.high { background: #27ae60; }
+        .score-badge.medium { background: #f39c12; }
+        .match-body h4 { color: #2c3e50; margin-bottom: 0.5rem; font-size: 1.05rem; }
+        .match-body p { font-size: 0.88rem; color: #555; margin-bottom: 0.3rem; }
+        .btn-contact { display: inline-block; margin-top: 0.75rem; padding: 0.55rem 1.1rem; background: #27ae60; color: white; text-decoration: none; border-radius: 6px; font-size: 0.9rem; transition: background 0.2s; }
+        .btn-contact:hover { background: #1e8449; }
+        .no-match { text-align: center; padding: 3rem; background: white; border-radius: 12px; color: #666; }
+        .no-match i { font-size: 3rem; color: #ccc; margin-bottom: 1rem; display: block; }
+        .back-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2rem; padding: 0.8rem 1.5rem; background: #4a6baf; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s; }
+        .back-btn:hover { background: #2c3e50; }
+        footer { text-align: center; padding: 2rem; background: #2c3e50; color: white; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-search-location logo-icon"></i>
+            <h1>AI Lost &amp; Found</h1>
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">Home</a>
+            <a href="{% url 'lost' %}">Report Lost</a>
+            <a href="{% url 'found' %}">Report Found</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Success Banner -->
+        <div class="success-banner">
+            <h2>✅ {% if mode == 'lost' %}Lost Item Reported!{% else %}Found Item Reported!{% endif %}</h2>
+            <p>{% if mode == 'lost' %}Your report is live. We found {{ matches|length }} possible match(es) below.{% else %}Thank you for reporting! We found {{ matches|length }} possible owner(s) below.{% endif %}</p>
+        </div>
+
+        <!-- Submitted Item Summary -->
+        <h3 class="section-title"><i class="fas fa-clipboard-list"></i> Your Submitted Item</h3>
+        <div class="submitted-card">
+            {% if submitted_item.photo %}
+                <img src="{{ submitted_item.photo.url }}" alt="Item photo">
+            {% else %}
+                <div class="no-img"><i class="fas fa-image"></i></div>
+            {% endif %}
+            <div class="submitted-info">
+                <h3>{{ submitted_item.get_item_type_display }}</h3>
+                <p><b>Brand:</b> {{ submitted_item.brand|default:"Unknown" }}</p>
+                {% if mode == 'lost' %}
+                    <p><b>Lost At:</b> {{ submitted_item.lost_location }}</p>
+                    <p><b>Date:</b> {{ submitted_item.lost_date|date:"d M Y, H:i" }}</p>
+                    <p><b>Reported by:</b> {{ submitted_item.owner_name }}</p>
+                {% else %}
+                    <p><b>Found At:</b> {{ submitted_item.found_location }}</p>
+                    <p><b>Date:</b> {{ submitted_item.found_date|date:"d M Y, H:i" }}</p>
+                    <p><b>Reported by:</b> {{ submitted_item.finder_name }}</p>
+                {% endif %}
+                <p><b>Description:</b> {{ submitted_item.description|truncatewords:20 }}</p>
+            </div>
+        </div>
+
+        <!-- Match Results -->
+        <h3 class="section-title">
+            <i class="fas fa-magic"></i>
+            {% if mode == 'lost' %}Possible Matching Found Items{% else %}Possible Matching Lost Items{% endif %}
+            <span style="font-size:1rem;color:#888;">({{ matches|length }} result{{ matches|length|pluralize }})</span>
+        </h3>
+
+        {% if matches %}
+        <div class="match-grid">
+            {% for match in matches %}
+            {% with item=match.item score=match.score %}
+            <div class="match-card">
+                {% if item.photo %}
+                    <img src="{{ item.photo.url }}" alt="{{ item.get_item_type_display }}">
+                {% else %}
+                    <div class="no-img"><i class="fas fa-image"></i></div>
+                {% endif %}
+                <div class="match-body">
+                    <span class="score-badge {% if score >= 4 %}high{% elif score >= 2 %}medium{% endif %}">
+                        Match Score: {{ score }}/5
+                    </span>
+                    <h4>{{ item.get_item_type_display }}</h4>
+                    <p><b>Brand:</b> {{ item.brand|default:"Unknown" }}</p>
+                    {% if mode == 'lost' %}
+                        <p><b>Found At:</b> {{ item.found_location }}</p>
+                        <p><b>Date:</b> {{ item.found_date|date:"d M Y" }}</p>
+                        <p>{{ item.description|truncatewords:12 }}</p>
+                        <a href="mailto:{{ item.finder_email }}" class="btn-contact">
+                            <i class="fas fa-envelope"></i> Contact Finder
+                        </a>
+                    {% else %}
+                        <p><b>Lost At:</b> {{ item.lost_location }}</p>
+                        <p><b>Date:</b> {{ item.lost_date|date:"d M Y" }}</p>
+                        <p>{{ item.description|truncatewords:12 }}</p>
+                        <a href="mailto:{{ item.owner_email }}" class="btn-contact">
+                            <i class="fas fa-envelope"></i> Contact Owner
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endwith %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-match">
+            <i class="fas fa-search"></i>
+            <h3>No matches found yet</h3>
+            <p>Don't worry — your report is saved and we'll keep checking for new matches automatically.</p>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'index' %}" class="back-btn">
+            <i class="fas fa-home"></i> Back to Home
+        </a>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AI Lost &amp; Found Project. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!-- Similar header and footer as index.html -->
+ {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found AI | Reclaim Your Items</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}   ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo-icon {
+    font-size: 2rem;
+    color: #4a6baf;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+nav a {
+    margin-left: 2rem;
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #4a6baf;
+}
+
+/* Hero Section */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.hero-content {
+    flex: 1;
+    padding-right: 2rem;
+}
+
+.hero-image {
+    flex: 1;
+    text-align: center;
+}
+
+.hero-image img {
+    max-width: 100%;
+    height: auto;
+    max-height: 400px;
+}
+
+h2 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+/* Buttons */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-lost {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: white;
+}
+
+.btn-found {
+    background: linear-gradient(135deg, #1dd1a1, #10ac84);
+    color: white;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a6baf, #2c3e50);
+    color: white;
+}
+
+.btn-secondary {
+    background: #f8f9fa;
+    color: #333;
+    border: 2px solid #dee2e6;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Stats */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4a6baf;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* About Preview */
+.about-preview {
+    padding: 4rem 5%;
+    background: white;
+    text-align: center;
+}
+
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.team-member {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+}
+
+.member-avatar {
+    font-size: 3rem;
+    color: #4a6baf;
+    margin-bottom: 1rem;
+}
+
+.role {
+    color: #4a6baf;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+/* Form Styles */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-section {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+select, input, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+select:focus, input:focus, textarea:focus {
+    outline: none;
+    border-color: #4a6baf;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Photo Upload */
+.photo-upload {
+    position: relative;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 3rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.upload-area:hover {
+    border-color: #4a6baf;
+    background: #f0f7ff;
+}
+
+.upload-note {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.preview-container {
+    position: relative;
+    margin-top: 1rem;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 5px;
+}
+
+.btn-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+/* Color Options */
+.color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.color-option {
+    padding: 0.5rem 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.color-option.active {
+    border-color: #4a6baf;
+    background: #4a6baf;
+    color: white;
+}
+
+.color-option:hover {
+    transform: scale(1.05);
+}
+
+/* Form Layout */
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.half {
+    flex: 1;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 2rem;
+    background: #2c3e50;
+    color: white;
+    margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-content {
+        padding-right: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+.lost-items-section {
+    padding: 40px;
+    background: #f7f9fc;
+}
+
+.lost-items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.lost-card {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.lost-card:hover {
+    transform: translateY(-5px);
+}
+
+.lost-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.no-img {
+    height: 180px;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 18px;
+}</style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <i class="fas fa-search-location logo-icon"></i>
+            <h1>AI Lost & Found</h1>
+        </div>
+        <nav>
+            <a href="{% url 'index' %}">Home</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    <div class="container">
+        <div class="form-header">
+            <h2><i class="fas fa-exclamation-triangle"></i> Report Lost Item</h2>
+            <p>Fill out the form below to report your lost item. Our AI will search for matches.</p>
+        </div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}            <!-- Photo Upload -->
+            <div class="form-section">
+                <h3>1. Upload Photo (Optional)</h3>
+                <div class="photo-upload">
+                   
+                        <label for="foundItemPhoto" class="upload-area" id="foundUploadArea">
+                    <i class="fas fa-camera"></i>
+                    <p>Click to upload photo</p>
+                  </label>
+
+<input type="file" name="photo" id="foundItemPhoto" accept="image/*" hidden>
+                    <div class="preview-container" id="previewContainer" style="display: none;">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <button type="button" id="removeImage" class="btn-remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item Details -->
+            <div class="form-section">
+                <h3>2. Item Details</h3>
+
+                <!-- Item Type Dropdown -->
+                <div class="form-group">
+                    <label for="itemType"><i class="fas fa-tag"></i> What did you lose? *</label>
+                    <select id="itemType" name="itemType" required>
+                        <option value="">Select item type</option>
+                        <option value="mobile">Mobile Phone</option>
+                        <option value="headset">Headset/Earphones</option>
+                        <option value="waterbottle">Water Bottle</option>
+                        <option value="idcard">ID Card</option>
+                        <option value="books">Books</option>
+                        <option value="laptop">Laptop</option>
+                        <option value="charger">Charger</option>
+                        <option value="wallet">Wallet/Purse</option>
+                        <option value="keys">Keys</option>
+                        <option value="bag">Bag/Backpack</option>
+                        <option value="jewelry">Jewelry</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Brand Dropdown (Dynamic) -->
+                <div class="form-group" id="brandGroup">
+                    <label for="brand"><i class="fas fa-trademark"></i> Brand (if applicable)</label>
+                    <select id="brand" name="brand">
+                        <option value="">Select brand (optional)</option>
+                        <!-- Brands will be populated based on item type -->
+                    </select>
+                </div>
+
+                <!-- Color Selection -->
+               
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-align-left"></i> Description *</label>
+                    <textarea name="description" id="description"
+                        placeholder="Describe your item in detail. Include material, size, unique features, scratches, stickers, or any identifying marks..."
+                        required></textarea>
+                    <small>Minimum 20 characters. Be as detailed as possible.</small>
+                </div>
+
+                <!-- Location & Time -->
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label for="lostLocation"><i class="fas fa-map-marker-alt"></i> Where did you lose it? *</label>
+                        <input type="text" name="lostLocation" id="lostLocation" placeholder="e.g., Library, Room 301, Parking Lot"
+                            required>
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="lostDate"><i class="fas fa-calendar-alt"></i> When did you lose it? *</label>
+                        <input type="datetime-local" name="lostDate" id="lostDate" required>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-section">
+                    <h3>3. Your Contact Information</h3>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="name">Your Name *</label>
+                            <input type="text" name="name" id="name" required>
+                        </div>
+                        <div class="form-group half">
+                            <label for="email">Email *</label>
+                            <input type="email" name="email" id="email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" name="phone" id="phone">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Start AI Search
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 AI Lost & Found Project. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+
+<script>
+const fileInput = document.getElementById("foundItemPhoto");
+const uploadArea = document.getElementById("foundUploadArea");
+const previewContainer = document.getElementById("previewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const removeBtn = document.getElementById("removeImage");
+
+/* Show preview after selecting image */
+fileInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            imagePreview.src = e.target.result;
+            previewContainer.style.display = "block";
+            uploadArea.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+/* Remove image */
+removeBtn.addEventListener("click", function () {
+    fileInput.value = "";
+    imagePreview.src = "";
+    previewContainer.style.display = "none";
+    uploadArea.style.display = "block";
+});
+</script>
+ <script>
+/* =====================================
+   BRANDS DATA BY ITEM TYPE
+===================================== */
+
+const brandsByCategory = {
+    mobile: [
+        "Apple", "Samsung", "OnePlus", "Xiaomi",
+        "Realme", "Oppo", "Vivo", "Google Pixel", "Nokia"
+    ],
+
+    laptop: [
+        "Apple", "Dell", "HP", "Lenovo",
+        "Asus", "Acer", "MSI", "Samsung"
+    ],
+
+    headset: [
+        "Sony", "Boat", "JBL", "Realme",
+        "OnePlus", "Apple AirPods", "Noise", "Bose"
+    ],
+
+    charger: [
+        "Apple", "Samsung", "OnePlus",
+        "Mi", "Realme", "Anker", "Boat"
+    ],
+
+    waterbottle: [
+        "Milton", "Cello", "Tupperware", "Pigeon"
+    ],
+
+    bag: [
+        "Wildcraft", "Skybags", "American Tourister",
+        "Nike", "Adidas", "Puma"
+    ],
+
+    wallet: [
+        "WildHorn", "Tommy Hilfiger", "Fastrack", "Woodland"
+    ],
+
+    jewelry: [
+        "Tanishq", "Malabar Gold", "Kalyan Jewellers"
+    ],
+
+    clothing: [
+        "Nike", "Adidas", "Puma", "Zara", "H&M", "Levi's"
+    ],
+
+    books: ["NCERT", "Pearson", "Oxford"],
+    idcard: ["College ID", "Office ID", "Government ID"],
+    keys: ["Unknown"],
+    other: ["Unknown"]
+};
+
+
+/* =====================================
+   DYNAMIC BRAND DROPDOWN
+===================================== */
+
+const itemTypeSelect = document.getElementById("itemType");
+const brandSelect = document.getElementById("brand");
+const brandGroup = document.getElementById("brandGroup");
+
+/* hide brand initially */
+brandGroup.style.display = "none";
+
+itemTypeSelect.addEventListener("change", function () {
+
+    const selectedType = this.value;
+
+    // reset options
+    brandSelect.innerHTML =
+        '<option value="">Select brand (optional)</option>';
+
+    if (brandsByCategory[selectedType]) {
+
+        brandsByCategory[selectedType].forEach(brand => {
+            const option = document.createElement("option");
+            option.value = brand;
+            option.textContent = brand;
+            brandSelect.appendChild(option);
+        });
+
+        brandGroup.style.display = "block";
+
+    } else {
+        brandGroup.style.display = "none";
+    }
+});
+</script>
+</html>
+
